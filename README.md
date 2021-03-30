@@ -19,7 +19,8 @@ UAL provides an html button to load the authenticator but if we want to make the
   .ual-button-gen {
     display: none;
   }
-</style>```
+</style>
+```
 
 ## Available Commands
 
