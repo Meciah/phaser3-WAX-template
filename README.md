@@ -15,7 +15,8 @@ And some wallets:
 
 UAL provides an html button to load the authenticator but if we want to make the call from Phaser we must hide the button in the index.html template file.
 
-```<style>
+```
+<style>
   .ual-button-gen {
     display: none;
   }
