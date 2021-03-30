@@ -1,14 +1,25 @@
-# Phaser 3 Webpack Project Template
+# Phaser 3 Webpack Project Template with WAX UAL connection
 
-A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/) that includes hot-reloading for development and production-ready builds.
+A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/) and [UAL](https://github.com/EOSIO/universal-authenticator-library) connection for [WAX Blockchain](https://wax.io) that includes hot-reloading for development and production-ready builds.
 
-This has been updated for Phaser 3.50.0 version and above.
-
-Loading images via JavaScript module `import` is also supported, although not recommended.
+From the original [Phaser template](https://github.com/photonstorm/phaser3-project-template) by Richard Davey (Photonstorm)
 
 ## Requirements
 
 [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+[UAL](https://github.com/EOSIO/universal-authenticator-library) is required to connect authentication providers (wallets)
+
+And some wallets:
+[UAL-WAX](https://github.com/eosdac/ual-wax) UAL authenticator for WAX Cloud Wallet.
+[UAL-Anchor](https://github.com/greymass/ual-anchor) UAL authenticator for Greymass Anchor Wallet
+
+UAL provides an html button to load the authenticator but if we want to make the call from Phaser we must hide the button in the index.html template file.
+
+```<style>
+  .ual-button-gen {
+    display: none;
+  }
+</style>```
 
 ## Available Commands
 
