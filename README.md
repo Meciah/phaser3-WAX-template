@@ -4,6 +4,8 @@ A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) 
 
 From the original [Phaser template](https://github.com/photonstorm/phaser3-project-template) by Richard Davey (Photonstorm)
 
+3DK Render Discord: [https://discord.gg/DJXXpuc](https://discord.gg/DJXXpuc)
+
 ## Requirements
 
 [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
