@@ -1,6 +1,7 @@
 import Phaser, { Scene } from 'phaser';
 import 'regenerator-runtime/runtime'
 import { readFunds } from './functions';
+import GameScene  from './scenes/game-scene';
 
 /**
  * Import libraries to connect UAL with different wallets.
@@ -16,6 +17,8 @@ import btLogin from './assets/login.png';
 import btLogout from './assets/logout.png';
 import btSendWax from './assets/btsend.png';
 import btPlay from './assets/play.png';
+
+
 
 class MyGame extends Phaser.Scene {
     constructor() {
@@ -36,7 +39,12 @@ class MyGame extends Phaser.Scene {
          */
         const myLoginCallback = users => {
             // Start game when user is login. Send user and ual data to scene.
-            this.scene.start('SceneA', { users: users, ual: ual });
+            // var T = document.getElementById("canvas-container");
+            // T.style.display = "visible";
+            // this.sys.game.destroy(true);
+            console.log('users')
+            console.log(users)
+            this.scene.start('GameScene', { users: users, ual: ual });
         }
         const myAppName = 'My Game'
 
@@ -161,7 +169,7 @@ class SceneA extends Phaser.Scene {
         .setInteractive();
         
         btPlay.on(Phaser.Input.Events.POINTER_DOWN, () => {
-            this.scene.start('SceneB', { users: User, ual: data.ual });
+            this.scene.start('GameScene', { users: data.users, ual: data.ual });
         });
 
         /**
@@ -185,74 +193,15 @@ class SceneA extends Phaser.Scene {
     
 }
 
-class SceneB extends Phaser.Scene {
-    constructor() {
-        super('SceneB');
-    }
 
-    init(data) {
-        // Recover UAL data from user and session
-        const { users, ual } = data;
-        this.loggedInuser = new User;
-        this.loggedInuser = users[0];
-        this.ual = ual;
-    }
-
-    preload() {
-        // This method is called once at the beginning
-        // It will load all the assets, like sprites and sounds
-        this.load.image('logout', btLogout);
-        // this.load.image('sky', 'assets/sky.png');
-        // this.load.image('ground', 'assets/platform.png');
-        // this.load.image('star', 'assets/star.png');
-        // this.load.image('bomb', 'assets/bomb.png');
-        // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-      
-      }
-
-    create () {
-        let SceneB = this;
-        // This method is called once, just after preload()
-        // It will initialize our scene, like the positions of the sprites
-    
-        this.add.image(400, 300, 'logout');
-        this.add.image(400, 300, 'star');
-        var platforms;
-    
-        platforms = this.physics.add.staticGroup();
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-        platforms.create(600, 400, 'ground');
-        platforms.create(50,  250, 'ground');
-        platforms.create(750, 220, 'ground');
-
-
-
-
-    /**
-         * Call to read only action on blockchain tables. No signature needed.
-         */
-     let balance = '0.00 WAX';
-     (async function () {
-         try {
-             // Get account name from UAL user
-             SceneB.nameUser = await SceneB.loggedInuser.getAccountName();
-             // Get balance
-             balance = await readFunds(SceneB.nameUser);
-             // Show data
-             SceneB.title = SceneB.add.text(20, 20, `User: ${SceneB.nameUser} Balance: ${balance}`);
-
-         } catch (error) {
-             console.log(error);
-         }
-     })();
-    }
- 
-    
-
-}
-
-
-
+const myChain = {
+    chainId: 'f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12',
+    rpcEndpoints: [{
+        protocol: 'https',
+        host: 'testnet.waxsweden.org',
+        port: ''
+    }]
+};
 
 const config = {
     type: Phaser.AUTO,
@@ -264,24 +213,111 @@ const config = {
     },
     scene: [MyGame, SceneA]
 };
-const config2 = {
-    width: 700,
-    height: 300,
-    backgroundColor: '#3498db',
-    physics: { default: 'arcade', arcade: { gravity: { y: 300 }, debug: false }  },
-    parent: 'game',
-    scene: [SceneB],
-    dom: {createContainer: true},
-    audio: { disableWebAudio: true }
-
-};
-const myChain = {
-    chainId: 'f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12',
-    rpcEndpoints: [{
-        protocol: 'https',
-        host: 'testnet.waxsweden.org',
-        port: ''
-    }]
-};
 
 let game = new Phaser.Game(config);
+
+// class SceneB extends Phaser.Scene {
+//     constructor() {
+//         super('SceneB');
+//     }
+
+//     init(data) {
+//         // Recover UAL data from user and session
+//         const { users, ual } = data;
+//         this.loggedInuser = new User;
+//         this.loggedInuser = users[0];
+//         this.ual = ual;
+//     }
+
+//     preload() {
+//         // This method is called once at the beginning
+//         // It will load all the assets, like sprites and sounds
+//         this.load.image('logout', btLogout);
+//         // this.load.image('sky', 'assets/sky.png');
+//         // this.load.image('ground', 'assets/platform.png');
+//         // this.load.image('star', 'assets/star.png');
+//         // this.load.image('bomb', 'assets/bomb.png');
+//         // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+      
+//       }
+
+//     create () {
+//         let SceneB = this;
+//         // This method is called once, just after preload()
+//         // It will initialize our scene, like the positions of the sprites
+    
+//         // this.add.image(400, 300, 'logout');
+//         this.add.image(400, 300, 'star');
+//         // var platforms;
+    
+//         // platforms = this.physics.add.staticGroup();
+//         // platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+//         // platforms.create(600, 400, 'ground');
+//         // platforms.create(50,  250, 'ground');
+//         // platforms.create(750, 220, 'ground');
+
+//         const btLogout = SceneB.add.image(350, 350, 'logout')
+//         .setInteractive();
+
+
+
+
+//     /**
+//          * Call to read only action on blockchain tables. No signature needed.
+//          */
+//      let balance = '0.00 WAX';
+//      (async function () {
+//          try {
+//              // Get account name from UAL user
+//              SceneB.nameUser = await SceneB.loggedInuser.getAccountName();
+//              // Get balance
+//              balance = await readFunds(SceneB.nameUser);
+//              // Show data
+//              SceneB.title = SceneB.add.text(20, 20, `User: ${SceneB.nameUser} Balance: ${balance}`);
+
+//          } catch (error) {
+//              console.log(error);
+//          }
+//      })();
+//     }
+ 
+    
+
+// }
+
+
+const config2 = {
+    type: Phaser.AUTO,
+    pixelArt: false,
+    roundPixels: false,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
+    width: 1000,
+    height: 600,
+    parent: 'canvas-container',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: GameScene
+  };
+
+// const config2 = {
+//     type: Phaser.AUTO,
+//     parent: 'phaser-example',
+//     width: 700,
+//     height: 300,
+//     backgroundColor: '#3498db',
+//     physics: { default: 'arcade', arcade: { gravity: { y: 300 }, debug: false }  },
+//     parent: 'game',
+//     scene: [MyGame, SceneB],
+//     dom: {createContainer: true},
+//     audio: { disableWebAudio: true }
+
+// };
+
+
+let game2 = new Phaser.Game(config2);
