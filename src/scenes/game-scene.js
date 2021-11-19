@@ -5,7 +5,7 @@ import Phaser from 'phaser';
 const width = 1000
 const height = 600
 // set container height
-document.querySelector("#canvas-container").style.height = height+'px';
+// document.querySelector("#canvas-container").style.height = height+'px';
 // document.querySelector("#canvas-container")
 // Game variables
 let player;
@@ -306,5 +306,23 @@ class GameScene extends Phaser.Scene {
     }
 
 }
+const config2 = {
+    type: Phaser.AUTO,
+    pixelArt: false,
+    roundPixels: false,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
+    width: 1000,
+    height: 600,
+    parent: 'canvas-container',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: GameScene
+  };
 
 export default GameScene;

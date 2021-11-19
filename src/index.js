@@ -84,13 +84,15 @@ class SceneA extends Phaser.Scene {
 
     init(data) {
         // Recover UAL data from user and session
+        console.log("scenea")
+        console.log(data)
         const { users, ual } = data;
         this.loggedInuser = new User;
         this.loggedInuser = users[0];
         this.ual = ual;
     }
 
-    create(data) {
+    create() {
         let SceneA = this;
         // const userAccount = SceneA.users[0];
 
@@ -205,13 +207,24 @@ const myChain = {
 
 const config = {
     type: Phaser.AUTO,
-    parent: 'phaser-example',
-    width: 800,
+    pixelArt: false,
+    roundPixels: false,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
+    width: 1000,
     height: 600,
+    parent: 'phaser-example',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
     dom: {
         createContainer: true
     },
-    scene: [MyGame, SceneA]
+    scene: [MyGame, SceneA, GameScene]
 };
 
 let game = new Phaser.Game(config);
@@ -286,24 +299,7 @@ let game = new Phaser.Game(config);
 // }
 
 
-const config2 = {
-    type: Phaser.AUTO,
-    pixelArt: false,
-    roundPixels: false,
-    // width: window.innerWidth,
-    // height: window.innerHeight,
-    width: 1000,
-    height: 600,
-    parent: 'canvas-container',
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
-    scene: GameScene
-  };
+
 
 // const config2 = {
 //     type: Phaser.AUTO,
@@ -320,4 +316,4 @@ const config2 = {
 // };
 
 
-let game2 = new Phaser.Game(config2);
+
