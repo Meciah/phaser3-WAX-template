@@ -1,5 +1,12 @@
 import Phaser from 'phaser';
-
+/**
+ * Import libraries to connect UAL with different wallets.
+ */
+ import { UALJs } from 'ual-plainjs-renderer';
+ import { Anchor } from 'ual-anchor'         // Anchor Wallet    
+ import { Wax } from '@eosdacio/ual-wax';    // WAX Cloud Wallet
+ import { User } from 'universal-authenticator-library'
+ // ********************************************************* //
 // const width = window.innerWidth < 1300 ? 1325: window.innerWidth;
 // const height = window.innerHeight;
 const width = 1000
@@ -25,14 +32,14 @@ class GameScene extends Phaser.Scene {
         this.playerVelocity =  -250;
     }
 
-    // init(data) {
-    //     // Recover UAL data from user and session
-    //     const { users, ual } = data;
-    //     console.log(data)
-    //     this.loggedInuser = new User;
-    //     this.loggedInuser = users[0];
-    //     this.ual = ual;
-    // }
+    init(data) {
+        // Recover UAL data from user and session
+        const { users, ual } = data;
+        console.log(data)
+        this.loggedInuser = new User;
+        this.loggedInuser = users[0];
+        this.ual = ual;
+    }
    
     preload () {
         this.load.image('background-clouds', './src/assets/clouds.png');
@@ -57,8 +64,8 @@ class GameScene extends Phaser.Scene {
 
     }
     
-    create (data) {       
-        console.log(data)
+    create () {   
+        let GameScene = this;    
         platforms = this.physics.add.staticGroup();
         //  Here we create the ground.
         platforms.create(width/2, height - 33 , 'ground2');
@@ -252,49 +259,52 @@ class GameScene extends Phaser.Scene {
 
     // Done: Collect the trophy
     collectTrophy(player, trophy) {
+        let GameScene = this;  
         console.log("You Won the Trophy!");
         this.sound.play('clapping');
         trophy.disableBody(true, true);
         console.log('Sending WAX...');
-            (async () => {
-                try {
-                    this.nameUser = await this.loggedInuser.getAccountName();
-                    await GameScene.loggedInuser.signTransaction(
-                        {
-                            actions: [{
-                                account: 'eosio.token',
-                                name: 'transfer',
-                                authorization: [{
-                                    actor: this.nameUser,
-                                    permission: 'active'
-                                }],
-                                data: {
-                                    from: this.nameUser,
-                                    to: '3dkrenderwax',
-                                    quantity: '1.00000000 WAX',
-                                    memo: 'This works!'
-                                }
-                            }]
-                        },
-                        {
-                            blocksBehind: 3,
-                            expireSeconds: 30
-                        }
-                    );
-                    /**
-                     * Operations on blockchain require a few seconds to synchronize. 
-                     * Force a pause before reading updated data.
-                     * Read new balance and update text
-                     */
-                    setTimeout(async () => {
-                        balance = await readFunds(SceneA.nameUser);
-                        SceneA.title.setText(`User: ${SceneA.nameUser} Balance: ${balance}`);
-                        console.log('Done!', balance);
-                    }, 10000);
-                } catch (error) {
-                    console.log(error);
-                }
-            })
+        // let nameUser
+        // nameUser = this.loggedInuser.getAccountName()
+        (async () => {
+            try {
+                GameScene.nameUser = await GameScene.loggedInuser.getAccountName();
+                await GameScene.loggedInuser.signTransaction(
+                    {
+                        actions: [{
+                            account: 'moleminertst',
+                            name: 'transfer',
+                            authorization: [{
+                                actor: 'moleminertst',
+                                permission: 'active'
+                            }],
+                            data: {
+                                from: 'moleminertst',
+                                to: GameScene.nameUser,
+                                quantity: '1.0000 MLE',
+                                memo: 'This works!'
+                            }
+                        }]
+                    },
+                    {
+                        blocksBehind: 3,
+                        expireSeconds: 30
+                    }
+                );
+                /**
+                 * Operations on blockchain require a few seconds to synchronize. 
+                 * Force a pause before reading updated data.
+                 * Read new balance and update text
+                 */
+                setTimeout(async () => {
+                    balance = await readFunds(GameScene.nameUser);
+                    GameScene.title.setText(`User: ${GameScene.nameUser} Balance: ${balance}`);
+                    console.log('Done!', balance);
+                }, 10000);
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     }
 
     hitBomb (player, bomb) {
@@ -306,23 +316,6 @@ class GameScene extends Phaser.Scene {
     }
 
 }
-const config2 = {
-    type: Phaser.AUTO,
-    pixelArt: false,
-    roundPixels: false,
-    // width: window.innerWidth,
-    // height: window.innerHeight,
-    width: 1000,
-    height: 600,
-    parent: 'canvas-container',
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false
-        }
-    },
-    scene: GameScene
-  };
+
 
 export default GameScene;
